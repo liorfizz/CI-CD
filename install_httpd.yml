@@ -1,0 +1,63 @@
+---
+- name: Install HTTPD, PHP, Python3, OpenSSH, vim and Flask
+  hosts: all
+  become: yes
+
+  vars:
+    ansible_python_interpreter: /usr/bin/python3.9
+    git_repo_url: "https://github.com/liorfizz/alpacaflask.git"
+    git_dest_dir: "/home/ec2-user/test"
+
+  tasks:
+    - name: Update dnf cache
+      dnf:
+        update_cache: yes
+
+    - name: Install required packages
+      dnf:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - httpd
+        - python3
+        - openssh-server
+        - python3-pip
+        - vim
+        - git
+        - tree
+
+    - name: Install Flask using pip
+      pip:
+        name: flask
+        state: present
+
+    - name: Start and enable HTTPD service
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+
+    - name: Clone Git repository
+      git:
+        repo: "{{ git_repo_url }}"
+        dest: "{{ git_dest_dir }}"
+
+    - name: Create systemd unit file
+      become: true
+      template:
+        src: "flaskapp.service"
+        dest: "/etc/systemd/system/flaskv1.service"
+        mode: 0644
+
+    - name: Reload systemd
+      become: true
+      systemd:
+        daemon_reload: yes
+
+    - name: Enable and restart the background process
+      become: true
+      service:
+       name: "flaskv1"
+       state: restarted
+       enabled: yes
+

@@ -1,0 +1,10 @@
+virtualmachines:
+  hosts:
+    lior1:
+      ansible_host: 18.192.67.194
+      ansible_ssh_private_key_file: ~/.ssh/lior.pem
+      ansible_user: ec2-user
+    lior2:
+      ansible_host: 3.122.232.110
+      ansible_ssh_private_key_file: ~/.ssh/lior.pem
+      ansible_user: ec2-user

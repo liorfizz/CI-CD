@@ -1,0 +1,23 @@
+---
+- name: Create EC2 Instance
+  hosts: localhost
+  gather_facts: False
+  tasks:
+    - name: Create a new EC2 instance
+      boto3:
+        region_name: "eu-central-1"
+        profile_name: "liorbochner"  # Replace with your AWS profile
+        aws_access_key: ""  # Replace with your AWS access key
+        aws_secret_key: ""  # Replace with your AWS secret key
+        security_group: ""  # Replace with your security group ID
+        instance_type: "t2.micro"
+        image_id: "ami-0b2ac948e23c57071"  # Replace with your desired AMI ID
+        key_name: "lior"  # Replace with your key pair name
+        count: 1
+        instance_tags:
+          Name: MyInstance
+      register: ec2_instance
+
+    - name: Print instance details
+      debug:
+        var: ec2_instance.instances[0].public_ip_address
