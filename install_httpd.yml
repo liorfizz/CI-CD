@@ -5,8 +5,8 @@
 
   vars:
     ansible_python_interpreter: /usr/bin/python3.9
-    git_repo_url: "https://github.com/liorfizz/alpacaflask.git"
-    git_dest_dir: "/home/ec2-user/test"
+    git_repo_url: "https://github.com/liorfizz/ci-cd.git"
+    git_dest_dir: "/home/ec2-user/"
 
   tasks:
     - name: Update dnf cache
