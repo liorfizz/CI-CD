@@ -1,6 +1,6 @@
 ---
 - name: Install HTTPD, PHP, Python3, OpenSSH, vim and Flask
-  hosts: loaclhost
+  hosts: localhost
   become: yes
 
   vars:
