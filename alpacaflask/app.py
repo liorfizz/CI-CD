@@ -1,8 +1,11 @@
 from flask import Flask, render_template
+from redis import Redis
 import os
 import random
 
+
 app = Flask(__name__)
+redis = Redis(host='redis', port=6379)
 
 # list of alpaca images
 images = [
