@@ -12,6 +12,8 @@ services:
       - redis
   redis:
     image: redis:alpine
+    volumes:
+      - db-data:/data
 
 volumes:
   db-data:
