@@ -1,5 +1,17 @@
+version: '3'
 services:
   web:
     build: .
     ports:
       - "5000:5000"
+    volumes:
+      - .:/app
+    environment:
+      - FLASK_ENV=development
+    depends_on:
+      - redis
+  redis:
+    image: redis:alpine
+
+volumes:
+  db-data:
