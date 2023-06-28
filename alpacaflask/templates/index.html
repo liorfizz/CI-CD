@@ -48,6 +48,11 @@
     .source a:hover {
       text-decoration: underline;
     }
+    .counter {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #FFD700;
+    }
   </style>
 </head>
 <body>
@@ -55,6 +60,7 @@
     <h4>Alpaca Gif of the Day <span>&#x1F60F;</span></h4>
     <img src="{{url}}" alt="Alpaca Gif of the Day">
     <p><span class="source">Courtesy: <a href="http://www.buzzfeed.com/copyranter/the-best-cat-gif-post-in-the-history-of-cat-gifs">Buzzfeed</a></span></p>
+    <p class="counter">Site Counter: {{ counter }}</p>
   </div>
 </body>
 </html>
