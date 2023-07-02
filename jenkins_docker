@@ -22,7 +22,7 @@ pipeline {
                         // Login to Docker Hub
                         docker.login(
                             credentialsId: 'dockerhub-credentials',
-                            registryUrl: 'https://hub.docker.com',
+                            registryUrl: 'https://hub.docker.com/repositories/liorfizz',
                         )
 
                         // Push Docker image to Docker Hub
