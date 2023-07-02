@@ -14,18 +14,22 @@ pipeline {
             }
         }
 
-    stage('Push to Docker Hub') {
-      steps {
-        script {
-          // Docker Hub login
-          docker.withRegistry('https://hub.docker.com/repositories/liorfizz', 'dockerhub') {
-            // Login to Docker Hub
-            docker.login()
-            
-            // Push Docker image to Docker Hub
-            docker.image('alpaca:latest').push('latest')
-          }
+        stage('Push to Docker Hub') {
+            steps {
+                script {
+                    // Docker Hub login
+                    docker.withRegistry('https://hub.docker.com', 'dockerhub') {
+                        // Login to Docker Hub
+                        docker.login(
+                            credentialsId: 'dockerhub-credentials',
+                            registryUrl: 'https://hub.docker.com',
+                        )
+
+                        // Push Docker image to Docker Hub
+                        docker.image('alpaca:latest').push('latest')
+                    }
+                }
+            }
         }
-      }
     }
 }
