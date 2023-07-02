@@ -14,72 +14,17 @@ pipeline {
             }
         }
 
-        stage('Clone') {
-            steps {
-                echo 'Cloning'
-                sh 'git clone https://github.com/liorfizz/ci-cd.git'
-            }
+    stage('Push to Docker Hub') {
+      steps {
+        script {
+          // Docker Hub login
+          docker.withRegistry('https://hub.docker.com/repositories/liorfizz', 'dockerhub') {
+            // Login to Docker Hub
+            docker.login()
+            
+            // Push Docker image to Docker Hub
+            docker.image('alpaca:latest').push('latest')
+          }
         }
-
-        stage('Compress') {
-            steps {
-                echo 'Compressing'
-                sh 'tar -czvf ci-cd.tar.gz ci-cd'
-                sh 'pwd'
-                sh 'ls'
-            }
-        }
-
-        stage('Upload to S3') {
-            steps {
-                echo 'Uploading to S3'
-                sh 'aws s3 cp ci-cd.tar.gz s3://kb-bucket31/ci-cd.tar.gz'
-            }
-        }
-
-        stage('testing') {
-            steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'ssh-testing', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
-                    sshagent(['ssh-testing']) {
-                        sh '''
-                        ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY ec2-user@${EC2_test_IP} "aws s3 cp s3://kb-bucket31/ci-cd.tar.gz ci-cd.tar.gz"
-                        ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_test_IP} "tar -zxvf ci-cd.tar.gz"
-                        ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_test_IP} "rm ci-cd.tar.gz"
-                        ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_test_IP} "bash ci-cd/alpacaflask/testing.sh"
-                        ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_test_IP} "sudo yum install python -y"
-                        ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_test_IP} "sudo yum install python-pip -y"
-                        ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_test_IP} "sudo pip install ansible"
-                        ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_test_IP} "ansible-playbook ci-cd/install_httpd.yml"
-                        echo "testing...."
-                        curl_output=$(curl -s -o /dev/null -w "%{http_code}" http://${EC2_test_IP}:5000)
-                        if [ $curl_output -eq "200" ]; then
-                            echo "Site is working (200 OK)"
-                        else
-                            echo "Error: Site is not working"
-                            exit 1
-                        fi    
-                        '''
-                    }
-                }
-            }
-        }
-
-        stage('deploy') {
-            steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'ssh-testing', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
-                    sshagent(['ssh-testing']) {
-                        sh '''
-                        ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} "aws s3 cp s3://kb-bucket31/ci-cd.tar.gz ci-cd.tar.gz"
-                        ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} "tar -zxvf ci-cd.tar.gz"
-                        ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} "rm ci-cd.tar.gz"
-                        ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} "sudo yum install python -y"
-                        ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} "sudo yum install python-pip -y"
-                        ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} "sudo pip install ansible"
-                        ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} "ansible-playbook ci-cd/install_httpd.yml"
-                        '''
-                    }
-                }
-            }
-        }
+      }
     }
-}
