@@ -13,11 +13,17 @@ pipeline {
                 sh 'rm -rf ci-cd'
             }
         }
+        stage('Clone') {
+            steps {
+                echo 'Cloning'
+                sh 'git clone https://github.com/liorfizz/ci-cd.git'
+            }
+        }
         stage('build') {
             steps {
                 sh 'docker image prune -a'
                 sh 'docker container prune -f'
-                sh 'ci-cd/alpacaflask/ && docker build -t liorfizz:alpaca .'
+                sh 'cd /var/lib/jenkins/ci-cd/alpacaflask/ && docker build -t liorfizz:alpaca .'
             }
         }
     }
