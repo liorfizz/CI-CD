@@ -20,5 +20,5 @@ pipeline {
                 sh 'ci-cd/alpacaflask/ && docker build -t liorfizz:alpaca .'
             }
         }
-
+    }
 }
