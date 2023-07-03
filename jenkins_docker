@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         EC2_test_IP = "35.159.23.172"
-        EC2_prod_IP = "3.122.232.62"
+        EC2_prod_IP = "3.125.9.15"
     }
 
     stages {
@@ -35,6 +35,17 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} "
                     sh 'docker push liorfizz/alpaca'
+                }
+            }
+        }
+        stage('deploy') {
+            steps {
+                withCredentials([sshUserPrivateKey(credentialsId: 'ssh-testing', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                    sshagent(['ssh-testing']) {
+                        sh '''
+                        ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} "echo 'hello"
+                        ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} "pwd"
+                    }
                 }
             }
         }
