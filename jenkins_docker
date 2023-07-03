@@ -24,7 +24,7 @@ pipeline {
                 sh 'docker image prune -a'
                 sh 'docker container prune -f'
                 sh 'pwd'
-                sh 'cd /var/lib/jenkins/ci-cd/alpacaflask/ && docker build -t liorfizz:alpaca .'
+                sh 'cd ci-cd/alpacaflask/ && docker build -t liorfizz:alpaca .'
             }
         }
     }
