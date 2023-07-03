@@ -13,13 +13,13 @@ pipeline {
                 sh 'rm -rf ci-cd'
             }
         }
-        stage('Clone') {
+        stage('Cloning git') {
             steps {
                 echo 'Cloning'
                 sh 'git clone https://github.com/liorfizz/ci-cd.git'
             }
         }
-        stage('build') {
+        stage('build container plus CLNUP') {
             steps {
                 sh 'docker image prune -a'
                 sh 'docker container prune -f'
