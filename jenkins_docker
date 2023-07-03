@@ -13,23 +13,12 @@ pipeline {
                 sh 'rm -rf ci-cd'
             }
         }
-
-        stage('Push to Docker Hub') {
+        stage('build') {
             steps {
-                script {
-                    // Docker Hub login
-                    docker.withRegistry('https://hub.docker.com', 'dockerhub') {
-                        // Login to Docker Hub
-                        docker.login(
-                            credentialsId: 'dockerhub-credentials',
-                            registryUrl: 'https://hub.docker.com/repositories/liorfizz',
-                        )
-
-                        // Push Docker image to Docker Hub
-                        docker.image('alpaca:latest').push('latest')
-                    }
-                }
+                sh 'docker image prune -a'
+                sh 'docker container prune -f'
+                sh 'ci-cd/alpacaflask/ && docker build -t liorfizz:alpaca .'
             }
         }
-    }
+
 }
