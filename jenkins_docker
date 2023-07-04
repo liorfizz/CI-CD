@@ -26,7 +26,7 @@ pipeline {
                     sh 'docker image prune -a'
                     sh 'docker container prune -f'
                     sh 'pwd'
-                    sh 'cd ci-cd/alpacaflask/ && docker build -t liorfizz/alpaca .'
+                    sh 'cd ci-cd/alpacaflask/ && docker-compose build'
                 }
             }
         }
@@ -49,9 +49,11 @@ pipeline {
                         ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} 'sudo usermod -a -G docker ec2-user'
                         ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} 'newgrp docker'
                         ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} 'sudo yum install python3-pip -y'
-                        ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP}  'pip3 install docker-compose'
+                        ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} 'sudo yum install python3-pip -y
+                        ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} 'pip3 install docker-compose'
                         ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} 'sudo systemctl start docker.service'
                         ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} 'sudo systemctl enable docker.service'      
+                        ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} 'docker pull liorfizz/alpaca'
                         """
                     }
                 }
