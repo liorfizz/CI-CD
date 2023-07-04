@@ -66,7 +66,6 @@ pipeline {
                         ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} 'pwd'
                         ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} 'docker image prune -a'
                         ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} 'docker container prune -f'
-                        ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} 'docker rmi -f $(docker images -q)'
                         ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} 'docker pull liorfizz/alpaca'
                         ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} 'cd ci-cd/alpacaflask/ && cp docker-compose.yml ~'
                         ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} 'docker-compose up'
