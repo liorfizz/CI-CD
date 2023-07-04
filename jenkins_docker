@@ -9,13 +9,11 @@ pipeline {
     stages {
         stage('Cleanup') {
             steps {
-                echo 'Cleaning'
                 sh 'rm -rf ci-cd'
             }
         }
         stage('Cloning git') {
             steps {
-                echo 'Cloning'
                 sh 'git clone https://github.com/liorfizz/ci-cd.git'
             }
         }
