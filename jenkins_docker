@@ -23,6 +23,7 @@ pipeline {
                     sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
                     sh 'docker image prune -a'
                     sh 'docker container prune -f'
+                    sh 'docker rmi $(docker images -q) || true'
                     sh 'docker rmi -f $(docker images -q)'
                     sh 'pwd'
                     sh 'cd ci-cd/alpacaflask/ && docker-compose build'
