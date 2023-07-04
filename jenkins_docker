@@ -59,7 +59,7 @@ pipeline {
                 }
             }
         }
-        stage('Install Docker') {
+        stage('running Docker') {
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: 'ssh-testing', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                     sshagent(['ssh-testing']) {
@@ -76,5 +76,4 @@ pipeline {
             }
         }
     }
-
 }
