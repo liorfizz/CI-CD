@@ -76,7 +76,7 @@ pipeline {
                             docker kill $(docker ps -q) || true
                             docker image prune -a
                             docker container prune -f
-                            docker rmi -f liorfizz/alpaca
+                            docker rmi -f $(docker images -q) || true
                             rm -rf ~/ci-cd/ || true
                             docker pull liorfizz/alpaca
                             git clone https://github.com/liorfizz/ci-cd.git
@@ -116,7 +116,7 @@ pipeline {
                             docker kill $(docker ps -q) || true
                             docker image prune -a
                             docker container prune -f
-                            docker rmi -f liorfizz/alpaca
+                            docker rmi -f $(docker images -q) || true
                             rm -rf ~/ci-cd/ || true
                             docker pull liorfizz/alpaca
                             git clone https://github.com/liorfizz/ci-cd.git
