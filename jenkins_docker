@@ -7,13 +7,9 @@ pipeline {
     }
 
     stages {
-        stage('Cleanup') {
+        stage('Clean and Cloning git') {
             steps {
                 sh 'rm -rf ci-cd'
-            }
-        }
-        stage('Cloning git') {
-            steps {
                 sh 'git clone https://github.com/liorfizz/ci-cd.git'
             }
         }
@@ -61,18 +57,19 @@ pipeline {
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: 'ssh-testing', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                     sshagent(['ssh-testing']) {
-                        sh '''
-                        ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} 'echo hello'
-                        ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} 'pwd'
-                        ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} 'docker-compose down'
-                        ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} 'docker image prune -a'
-                        ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} 'docker container prune -f'
-                        ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} 'docker rmi -f liorfizz/alpaca'
-                        ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} 'rm -rf ~/ci-cd/ || true'
-                        ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} 'docker pull liorfizz/alpaca'
-                        ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} 'git clone https://github.com/liorfizz/ci-cd.git'
-                        ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} 'cd ci-cd/alpacaflask/ && cp docker-compose.yml ~'
-                        ssh -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} 'docker-compose up -d'
+                        '''
+                        ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} '
+                          pwd
+                          docker-compose down
+                          docker image prune -a
+                          docker container prune -f
+                          docker rmi -f liorfizz/alpaca
+                          rm -rf ~/ci-cd/ || true
+                          docker pull liorfizz/alpaca
+                          git clone https://github.com/liorfizz/ci-cd.git
+                          cd ci-cd/alpacaflask/ && cp docker-compose.yml ~
+                          docker-compose up -d
+                          '
                         '''
                     }
                 }
