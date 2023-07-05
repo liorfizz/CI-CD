@@ -76,12 +76,12 @@ pipeline {
                             docker kill $(docker ps -q) || true
                             docker image prune -a
                             docker container prune -f
-                            docker rmi -f $(docker images -q) || true
+                            docker rmi -f liorfizz/alpaca
                             rm -rf ~/ci-cd/ || true
                             docker pull liorfizz/alpaca
                             git clone https://github.com/liorfizz/ci-cd.git
                             cd ci-cd/alpacaflask/ && cp docker-compose.yml ~
-                            docker-compose up -d --abort-on-container-exit
+                            docker-compose up -d --fail-on-container-exit
                         ' 
                         '''
                     }
@@ -116,7 +116,7 @@ pipeline {
                             docker kill $(docker ps -q) || true
                             docker image prune -a
                             docker container prune -f
-                            docker rmi -f $(docker images -q) || true
+                            docker rmi -f liorfizz/alpaca
                             rm -rf ~/ci-cd/ || true
                             docker pull liorfizz/alpaca
                             git clone https://github.com/liorfizz/ci-cd.git
