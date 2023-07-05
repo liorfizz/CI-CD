@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 from redis import Redis
 import os
-import random
+import randomseert
 
 
 app = Flask(__name__)
