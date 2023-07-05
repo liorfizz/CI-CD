@@ -81,7 +81,7 @@ pipeline {
                             docker pull liorfizz/alpaca
                             git clone https://github.com/liorfizz/ci-cd.git
                             cd ci-cd/alpacaflask/ && cp docker-compose.yml ~
-                            docker-compose up -d --fail-on-container-exit
+                            docker-compose up --abort-on-container-exit
                         ' 
                         '''
                     }
@@ -121,7 +121,7 @@ pipeline {
                             docker pull liorfizz/alpaca
                             git clone https://github.com/liorfizz/ci-cd.git
                             cd ci-cd/alpacaflask/ && cp docker-compose.yml ~
-                            docker-compose up -d
+                            docker-compose up --abort-on-container-exit
                         '
                         '''
                     }
