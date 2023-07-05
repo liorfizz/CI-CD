@@ -20,7 +20,7 @@ pipeline {
                     sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
                     sh 'docker image prune -a'
                     sh 'docker container prune -f'
-                    sh 'docker rmi $(docker images -q) || true'
+                    sh 'docker rmi -f $(docker images -q) || true'
                     sh 'pwd'
                     sh 'cd ci-cd/alpacaflask/ && docker-compose build'
                 }
@@ -41,6 +41,16 @@ pipeline {
                 withCredentials([sshUserPrivateKey(credentialsId: 'ssh-testing', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                     sshagent(['ssh-testing']) {
                         sh """
+                        ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY ec2-user@${EC2_test_IP} '
+                            sudo yum install docker -y
+                            sudo usermod -a -G docker ec2-user
+                            newgrp docker
+                            sudo yum install python3-pip -y
+                            pip3 install docker-compose
+                            sudo systemctl start docker.service
+                            sudo systemctl enable docker.service
+                            sudo yum install git -y
+                        '
                         ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} '
                             sudo yum install docker -y
                             sudo usermod -a -G docker ec2-user
@@ -57,12 +67,12 @@ pipeline {
             }
         }  
 
-         stage('Test Docker') {
+        stage('Test Docker') {
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: 'ssh-testing', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                     sshagent(['ssh-testing']) {
                         sh """
-                        ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY ec2-user@${EC2_prod_IP} '
+                        ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY ec2-user@${EC2_test_IP} '
                             pwd
                             docker-compose down
                             docker image prune -a
@@ -77,11 +87,11 @@ pipeline {
                         
                         echo "Testing...."
                         curl_output=$(curl -s -o /dev/null -w "%{http_code}" http://${EC2_test_IP}:5000)
-                        if [ $curl_output -eq "200" ]; then
-                        echo "Site is working (200 OK)"
+                        if [ "$curl_output" -eq "200" ]; then
+                            echo "Site is working (200 OK)"
                         else
-                        echo "Error: Site is not working"
-                        exit 1
+                            echo "Error: Site is not working"
+                            exit 1
                         fi 
                         """
                     }
