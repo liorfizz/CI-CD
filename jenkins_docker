@@ -80,7 +80,7 @@ pipeline {
                             rm -rf ~/ci-cd/ || true
                             docker pull liorfizz/alpaca
                             git clone https://github.com/liorfizz/ci-cd.git
-                            cd ci-cd/alpacaflask/ && cp docker-compose.yml ~
+                            cp ci-cd/alpacaflask/docker-compose.yml ~
                             docker-compose up -d
                         ' 
                         '''
@@ -120,7 +120,7 @@ pipeline {
                             rm -rf ~/ci-cd/ || true
                             docker pull liorfizz/alpaca
                             git clone https://github.com/liorfizz/ci-cd.git
-                            cd ci-cd/alpacaflask/ && cp docker-compose.yml ~
+                            cp ci-cd/alpacaflask/docker-compose.yml ~
                             docker-compose up -d
                         '
                         '''
