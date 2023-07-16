@@ -34,7 +34,7 @@ pipeline {
                     sh 'docker container prune -f'
                     sh 'docker rmi -f $(docker images -q) || true'
                     sh 'pwd'
-                    sh 'cd ci-cd/alpacaflask/ && DOCKER_IMAGE_VERSION=${env.DOCKER_IMAGE_VERSION} docker-compose build'
+                    sh "cd ci-cd/alpacaflask/ && DOCKER_IMAGE_VERSION=${env.DOCKER_IMAGE_VERSION} docker-compose build"
                 }
             }
         }
