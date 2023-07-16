@@ -4,6 +4,7 @@ pipeline {
     environment {
         EC2_test_IP = "35.158.140.36"
         EC2_prod_IP = "52.58.116.118"
+        DOCKER_IMAGE_VERSION = ""
     }
 
     stages {
@@ -14,9 +15,15 @@ pipeline {
             }
         }
 
+    stages {
         stage('Retrieve Docker Image Version') {
             steps {
-                sh 'cd ci-cd/alpacaflask/ && export DOCKER_IMAGE_VERSION=$(git describe --abbrev=0 --tags)'
+                script {
+                    DOCKER_IMAGE_VERSION = sh(
+                        script: 'cd ci-cd/alpacaflask/ && git describe --abbrev=0 --tags',
+                        returnStdout: true
+                    ).trim()
+                }
             }
         }
 
@@ -28,7 +35,7 @@ pipeline {
                     sh 'docker container prune -f'
                     sh 'docker rmi -f $(docker images -q) || true'
                     sh 'pwd'
-                    sh 'cd ci-cd/alpacaflask/ && docker-compose build --build-arg DOCKER_IMAGE_VERSION=${DOCKER_IMAGE_VERSION}'
+                    sh 'cd ci-cd/alpacaflask/ && docker-compose build --build-arg DOCKER_IMAGE_VERSION=${env.DOCKER_IMAGE_VERSION}'
                 }
             }
         }
