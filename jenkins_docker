@@ -15,7 +15,6 @@ pipeline {
             }
         }
 
-            stages {
         stage('Retrieve Docker Image Version') {
             steps {
                 script {
