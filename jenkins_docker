@@ -4,7 +4,6 @@ pipeline {
     environment {
         EC2_test_IP = "35.158.140.36"
         EC2_prod_IP = "52.58.116.118"
-        DOCKER_IMAGE_VERSION = ""
     }
 
     stages {
@@ -14,18 +13,7 @@ pipeline {
                 sh 'git clone https://github.com/liorfizz/ci-cd.git'
             }
         }
-
-        stage('Retrieve Docker Image Version') {
-            steps {
-                script {
-                    DOCKER_IMAGE_VERSION = sh(
-                        script: 'cd ci-cd/alpacaflask/ && git describe --abbrev=0 --tags',
-                        returnStdout: true
-                    ).trim()
-                }
-            }
-        }
-
+        
         stage('Build and Cleanup Container') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
@@ -33,16 +21,17 @@ pipeline {
                     sh 'docker image prune -a'
                     sh 'docker container prune -f'
                     sh 'docker rmi -f $(docker images -q) || true'
-                    sh "cd ci-cd/alpacaflask/ && docker-compose build --build-arg DOCKER_IMAGE_VERSION=${DOCKER_IMAGE_VERSION} -t liorfizz/alpaca:${DOCKER_IMAGE_VERSION}"
+                    sh 'pwd'
+                    sh 'cd ci-cd/alpacaflask/ && docker-compose build'
                 }
             }
         }
-
+        
         stage('Push to Docker Hub') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
-                    sh "docker push liorfizz/alpaca:${DOCKER_IMAGE_VERSION}"
+                    sh 'docker push liorfizz/alpaca'
                 }
             }
         }
