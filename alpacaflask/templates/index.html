@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en">
 <head>
   <title>Alpaca Gif of the Day</title>
@@ -48,6 +48,21 @@
     .source a:hover {
       text-decoration: underline;
     }
+    .counter {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #FFD700;
+    }
+    .jump-button {
+      margin-top: 20px;
+      background-color: #FFD700;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
   </style>
   <script>
     function makeAlpacaJump() {
@@ -64,6 +79,7 @@
     <h4>Alpaca Gif of the Day <span>&#x1F60F;</span></h4>
     <img id="alpaca-image" src="{{url}}" alt="Alpaca Gif of the Day">
     <p><span class="source">Courtesy: <a href="http://www.buzzfeed.com/copyranter/the-best-cat-gif-post-in-the-history-of-cat-gifs">Buzzfeed</a></span></p>
+    <p class="counter">Site Counter: {{ counter }}</p>
     <button class="jump-button" onclick="makeAlpacaJump()">Make Alpaca Jump</button>
   </div>
 </body>
