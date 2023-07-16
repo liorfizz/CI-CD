@@ -49,12 +49,22 @@
       text-decoration: underline;
     }
   </style>
+  <script>
+    function makeAlpacaJump() {
+      var alpacaImage = document.getElementById('alpaca-image');
+      alpacaImage.classList.add('jump');
+      setTimeout(function() {
+        alpacaImage.classList.remove('jump');
+      }, 2000);
+    }
+  </script>
 </head>
 <body>
   <div class="gif-container">
     <h4>Alpaca Gif of the Day <span>&#x1F60F;</span></h4>
     <img id="alpaca-image" src="{{url}}" alt="Alpaca Gif of the Day">
     <p><span class="source">Courtesy: <a href="http://www.buzzfeed.com/copyranter/the-best-cat-gif-post-in-the-history-of-cat-gifs">Buzzfeed</a></span></p>
+    <button class="jump-button" onclick="makeAlpacaJump()">Make Alpaca Jump</button>
   </div>
 </body>
 </html>
