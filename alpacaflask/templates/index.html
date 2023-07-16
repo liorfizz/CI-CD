@@ -63,6 +63,17 @@
       cursor: pointer;
       border-radius: 4px;
     }
+    @keyframes glitch {
+      0% { background-position: 0 0; }
+      20% { background-position: -5px -5px; }
+      40% { background-position: 5px 5px; }
+      60% { background-position: -5px -5px; }
+      80% { background-position: 5px 5px; }
+      100% { background-position: 0 0; }
+    }
+    .glitch-effect {
+      animation: glitch 2s linear;
+    }
   </style>
   <script>
     function makeAlpacaJump() {
@@ -70,6 +81,14 @@
       alpacaImage.classList.add('jump');
       setTimeout(function() {
         alpacaImage.classList.remove('jump');
+      }, 2000);
+    }
+
+    function triggerGlitchEffect() {
+      var bodyElement = document.getElementsByTagName('body')[0];
+      bodyElement.classList.add('glitch-effect');
+      setTimeout(function() {
+        bodyElement.classList.remove('glitch-effect');
       }, 2000);
     }
   </script>
@@ -81,6 +100,7 @@
     <p><span class="source">Courtesy: <a href="http://www.buzzfeed.com/copyranter/the-best-cat-gif-post-in-the-history-of-cat-gifs">Buzzfeed</a></span></p>
     <p class="counter">Site Counter: {{ counter }}</p>
     <button class="jump-button" onclick="makeAlpacaJump()">Make Alpaca Jump</button>
+    <button class="jump-button" onclick="triggerGlitchEffect()">Trigger Glitch Effect</button>
   </div>
 </body>
 </html>
