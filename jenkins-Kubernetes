@@ -5,16 +5,6 @@ pipeline {
         EC2_test_IP = "18.185.15.37"
         EC2_prod_IP = "18.195.117.231"
     }
-    
-    stage('Build') {
-        steps {
-            echo "Running ${VERSION} on ${env.JENKINS_URL}"
-            git branch: "${BRANCH}",  .....
-            echo "for brnach ${env.BRANCH_NAME}"
-            sh "docker build -t ${NAME} ."
-            sh "docker tag ${NAME}:latest ${IMAGE_REPO}/${NAME}:${VERSION}"
-        }
-    }
 
     stages {
         stage('Clean and Clone git') {
@@ -23,7 +13,17 @@ pipeline {
                 sh 'git clone https://github.com/liorfizz/ci-cd.git'
             }
         }
-        
+
+        stage('Build') {
+            steps {
+                echo "Running ${VERSION} on ${env.JENKINS_URL}"
+                git branch: "${BRANCH}",  .....
+                echo "for brnach ${env.BRANCH_NAME}"
+                sh "docker build -t ${NAME} ."
+                sh "docker tag ${NAME}:latest ${IMAGE_REPO}/${NAME}:${VERSION}"
+                }
+        }
+
         stage('Build and Cleanup Container') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
