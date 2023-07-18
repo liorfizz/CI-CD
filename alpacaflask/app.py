@@ -5,9 +5,11 @@ import random
 
 
 app = Flask(__name__)
-redis = Redis(host='redis', port=6379)
+redis_host = os.environ.get('REDIS_HOST', 'redis')
+redis_port = int(os.environ.get('REDIS_PORT', 6379))
+redis = Redis(host=redis_host, port=redis_port)
 
-# list of alpaca images
+# List of alpaca images
 images = [
     "https://media3.giphy.com/media/QoncgdHL9TDm0ePySn/giphy.gif?cid=ecf05e47eqnn1ipow6vxu4crrsdhd46t2za1sh2bmgyvp0y6&ep=v1_gifs_search&rid=giphy.gif&ct=g",
     "https://media2.giphy.com/media/c8pTpUed78PSg/giphy.gif?cid=ecf05e473chqondqlden75jnqclpmstfpdwqkgxlshn134oo&ep=v1_gifs_related&rid=giphy.gif&ct=g",
@@ -27,3 +29,4 @@ def index():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+
