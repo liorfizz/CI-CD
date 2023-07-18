@@ -43,8 +43,7 @@ pipeline {
         stage('running Kubernetes') {
             steps {
                 sh 'cd ci-cd/ && kubectl apply -f withredis.yaml'
-                sh 'kubectl scale deployment flask-app-deployment --replicas=0'
-                sh 'kubectl scale deployment flask-app-deployment --replicas=3'
+                sh 'kubectl rollout restart deploy flask-app-deployment'
             }
         }
     }
