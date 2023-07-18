@@ -28,6 +28,6 @@ spec:
     spec:
       containers:
         - name: flask-app-container
-          image: liorfizz/alpaca2
+          image: liorfizz/alpaca
           ports:
             - containerPort: 5000
