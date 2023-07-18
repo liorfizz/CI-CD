@@ -27,6 +27,26 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: redis-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+        - name: redis-container
+          image: redis:latest
+          ports:
+            - containerPort: 6379
+---           
+apiVersion: apps/v1
+kind: Deployment
+metadata:
   name: flask-app-deployment
 spec:
   replicas: 3
@@ -47,24 +67,4 @@ spec:
             - name: REDIS_HOST
               value: redis-service
             - name: REDIS_PORT
-              value: "6379"
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: redis-deployment
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: redis
-  template:
-    metadata:
-      labels:
-        app: redis
-    spec:
-      containers:
-        - name: redis-container
-          image: redis:latest
-          ports:
-            - containerPort: 6379
+              value: "6379" 
