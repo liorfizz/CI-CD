@@ -41,7 +41,7 @@ pipeline {
 
         stage('running Kubernetes') {
             steps {
-                sh 'cd ci-cd/ && kubectl apply -f kubeflask.yaml'
+                sh 'cd ci-cd/ && kubectl apply -f withredis.yaml'
             }
         }
     }
