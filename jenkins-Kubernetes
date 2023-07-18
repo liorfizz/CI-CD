@@ -12,6 +12,7 @@ pipeline {
     stages {
         stage('Clean and Clone git') {
             steps {
+                sh 'pwd'
                 sh 'rm -rf ci-cd'
                 sh 'git clone https://github.com/liorfizz/ci-cd.git'
             }
