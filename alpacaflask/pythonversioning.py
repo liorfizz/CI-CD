@@ -16,7 +16,7 @@ else:
     next_version = 1.0
 
 # Format the version number to one decimal place
-next_version = f"{next_version:.1f}"
+next_version = round(next_version, 1)
 
 image_name = f"liorfizz/alpaca:{next_version}"
 
@@ -39,6 +39,6 @@ print(f"Successfully pushed image: {latest_image_name}")
 for image in images:
     if image.tags and image.tags[0].startswith("liorfizz/alpaca:"):
         version = float(image.tags[0].split(":")[1])
-        if version != latest_version and version != round(next_version, 1):
+        if version != float(latest_version) and version != float(next_version):
             client.images.remove(image.id, force=True)
             print(f"Successfully removed image: {image.tags[0]}")
