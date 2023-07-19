@@ -25,7 +25,7 @@ pipeline {
                     sh 'docker image prune -a'
                     sh 'docker container prune -f'
                     sh 'docker rmi -f $(docker images -q) || true'
-                    sh 'pwd'
+                    sh 'echo "apply the script"'
                     sh 'cd ci-cd/alpacaflask && python3 pythonversioning.py'
                 }
             }
