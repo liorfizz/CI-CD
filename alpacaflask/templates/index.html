@@ -114,14 +114,6 @@
     }
   </style>
   <script>
-    function makeAlpacaJump() {
-      var alpacaImage = document.getElementById('alpaca-image');
-      alpacaImage.classList.add('jump');
-      setTimeout(function() {
-        alpacaImage.classList.remove('jump');
-      }, 2000);
-    }
-
     function makeBackgroundSpin() {
       var bodyElement = document.getElementsByTagName('body')[0];
       bodyElement.classList.add('spin-effect');
@@ -145,7 +137,6 @@
     <img id="alpaca-image" src="{{url}}" alt="Alpaca Gif of the Day">
     <p><span class="source">Courtesy: <a href="http://www.buzzfeed.com/copyranter/the-best-cat-gif-post-in-the-history-of-cat-gifs">Buzzfeed</a></span></p>
     <p class="counter">Site Counter: {{ counter }}</p>
-    <button class="jump-button" onclick="makeAlpacaJump()">Make Alpaca Jump</button>
     <button class="jump-button" onclick="makeBackgroundSpin()">Spin Background</button>
     <button class="jump-button" onclick="triggerGlitchEffect()">Trigger Glitch Effect</button>
   </div>
