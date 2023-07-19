@@ -34,11 +34,3 @@ image_to_tag = client.images.get(image_name)
 image_to_tag.tag(repository="liorfizz/alpaca", tag=latest_tag)
 client.images.push(repository="liorfizz/alpaca", tag=latest_tag)
 print(f"Successfully pushed image: {latest_image_name}")
-
-# Clean up older versions of the image
-for image in images:
-    if image.tags and image.tags[0].startswith("liorfizz/alpaca:"):
-        version = float(image.tags[0].split(":")[1])
-        if version != latest_version and version != round(next_version, 1):
-            client.images.remove(image.id, force=True)
-            print(f"Successfully removed image: {image.tags[0]}"
