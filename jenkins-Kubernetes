@@ -22,9 +22,6 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
-                    sh 'docker image prune -a'
-                    sh 'docker container prune -f'
-                    sh 'docker rmi -f $(docker images -q) || true'
                     sh 'echo "apply the script"'
                     sh 'cd ci-cd/alpacaflask && python3 pythonversioning.py'
                 }
