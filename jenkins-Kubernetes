@@ -26,7 +26,7 @@ pipeline {
                     sh 'docker container prune -f'
                     sh 'docker rmi -f $(docker images -q) || true'
                     sh 'pwd'
-                    sh 'python pythonversioning.py'
+                    sh 'cd ci-cd | python pythonversioning.py'
                 }
             }
         }
