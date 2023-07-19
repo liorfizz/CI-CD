@@ -101,6 +101,17 @@
     .glitch-effect {
       animation: glitch 2s infinite;
     }
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+    .spin-effect {
+      animation: spin 2s infinite;
+    }
   </style>
   <script>
     function makeAlpacaJump() {
@@ -108,6 +119,14 @@
       alpacaImage.classList.add('jump');
       setTimeout(function() {
         alpacaImage.classList.remove('jump');
+      }, 2000);
+    }
+
+    function makeBackgroundSpin() {
+      var bodyElement = document.getElementsByTagName('body')[0];
+      bodyElement.classList.add('spin-effect');
+      setTimeout(function() {
+        bodyElement.classList.remove('spin-effect');
       }, 2000);
     }
 
@@ -127,6 +146,7 @@
     <p><span class="source">Courtesy: <a href="http://www.buzzfeed.com/copyranter/the-best-cat-gif-post-in-the-history-of-cat-gifs">Buzzfeed</a></span></p>
     <p class="counter">Site Counter: {{ counter }}</p>
     <button class="jump-button" onclick="makeAlpacaJump()">Make Alpaca Jump</button>
+    <button class="jump-button" onclick="makeBackgroundSpin()">Spin Background</button>
     <button class="jump-button" onclick="triggerGlitchEffect()">Trigger Glitch Effect</button>
   </div>
 </body>
