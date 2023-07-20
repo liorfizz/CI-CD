@@ -32,7 +32,7 @@ pipeline {
                 sh 'git clone https://github.com/liorfizz/ci-cd.git'
                 sh 'cd ci-cd && kubectl apply -f withredis.yaml'
                 sh 'kubectl rollout restart deploy flask-app-deployment'
-            EOF
+EOF
             }
         }
     }
