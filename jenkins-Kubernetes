@@ -28,7 +28,7 @@ pipeline {
         stage('running Kubernetes') {
             steps {
                 sh 'gcloud cloud-shell ssh'
-                sh 'kubectl apply -f withredis.yaml'
+                sh 'cd ci-cd && kubectl apply -f withredis.yaml'
                 sh 'exit'
             }
         }
