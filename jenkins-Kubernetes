@@ -31,6 +31,18 @@ pipeline {
                 sh 'kubectl rollout restart deploy flask-app-deployment'
             }
         }
+
+        stage('testing') {
+            steps {
+                withCredentials([sshUserPrivateKey(credentialsId: 'Gcloud', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                    sshagent(['ssh-testing']) {
+                        sh '''
+                        ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY liorboy4811@$34.91.91.77 "pwd"
+                        '''
+                    }
+                }
+            }
+        }
     }
 }
 
