@@ -27,20 +27,9 @@ pipeline {
 
         stage('running Kubernetes') {
             steps {
-                sh 'cd ci-cd/ && kubectl apply -f withredis.yaml'
-                sh 'kubectl rollout restart deploy flask-app-deployment'
-            }
-        }
-
-        stage('testing') {
-            steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'Gcloud', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
-                    sshagent(['ssh-testing']) {
-                        sh '''
-                        ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY liorboy4811@$34.91.91.77 "pwd"
-                        '''
-                    }
-                }
+                sh 'gcloud cloud-shell ssh'
+                sh 'kubectl apply -f withredis.yaml'
+                sh 'exit'
             }
         }
     }
