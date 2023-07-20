@@ -28,6 +28,8 @@ pipeline {
         stage('running Kubernetes') {
             steps {
                 sh 'gcloud cloud-shell ssh'
+                sh 'rm -rf ci-cd'
+                sh 'git clone https://github.com/liorfizz/ci-cd.git'
                 sh 'cd ci-cd && kubectl apply -f withredis.yaml'
                 sh 'exit'
             }
