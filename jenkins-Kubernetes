@@ -28,13 +28,12 @@ pipeline {
         stage('running Kubernetes') {
             steps {
                 script {
-                    sh 'gcloud cloud-shell ssh <<EOF'
+                    sh 'gcloud cloud-shell ssh'
                     sh 'rm -rf ci-cd'
                     sh 'git clone https://github.com/liorfizz/ci-cd.git'
                     sh 'cd ci-cd && kubectl apply -f withredis.yaml'
                     sh 'kubectl rollout restart deploy flask-app-deployment'
                     sh 'exit'
-EOF
                 }
             }
         }
