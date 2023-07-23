@@ -31,7 +31,6 @@ pipeline {
                 script {
                     sh 'gcloud container clusters get-credentials test-cluster --region=europe-central2'
                     sh 'cd ci-cd && kubectl apply -f withredis.yaml'
-                    sh 'kubectl rollout restart deploy flask-app-deployment'
                 }
             }
         }
@@ -70,7 +69,6 @@ pipeline {
                 script {
                     sh 'gcloud container clusters get-credentials flask-cluster --region=europe-central2'
                     sh 'cd ci-cd && kubectl apply -f withredis.yaml'
-                    sh 'kubectl rollout restart deploy flask-app-deployment'
                 }
             }
         }
