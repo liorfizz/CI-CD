@@ -4,6 +4,7 @@ pipeline {
     environment {
         EC2_test_IP = "18.185.15.37"
         EC2_prod_IP = "18.195.117.231"
+        externalIP = null
     }
 
     stages {
@@ -38,17 +39,28 @@ pipeline {
         stage('Get External IP') {
             steps {
                 script {
-                    // Run the kubectl command to get the external IP and capture the output into a variable
-                    def externalIP = sh(
-                        script: '''
-                            externalIP=$(kubectl get svc flask-app-service --no-headers | awk '{print $4}')
-                            echo $externalIP
-                            sleep 30
-                        ''',
-                        returnStdout: true
-                    ).trim()
+                    // Run the kubectl command to get the external IP and store the output in a file
+                    sh 'kubectl get svc flask-app-service --no-headers | awk \'{print $4}\' > external_ip_qa.txt'
+                }
+            }
+        }
 
-                    echo "External IP: ${externalIP}"
+        stage('Testing Q/A') {
+            steps {
+                script {
+                    // Read the value of the external IP from the file
+                    def externalIP = readFile('external_ip_qa.txt').trim()
+                    // Set 'externalIP' as an environment variable to use it in the shell script
+                    env.externalIP = externalIP
+                    sh '''
+                    curl_output=$(curl -s -o /dev/null -w "%{http_code}" http://${externalIP}:5000)
+                    if [ "$curl_output" -eq "200" ]; then
+                        echo "Site is working (200 OK)"
+                    else
+                        echo "Error: Site is not working"
+                        exit 1
+                    fi
+                    '''
                 }
             }
         }
