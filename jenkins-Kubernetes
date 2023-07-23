@@ -41,7 +41,7 @@ pipeline {
                     sh '''
                     kubectl get svc flask-app-service --no-headers | awk '{print $4}' > external_ip_qa.txt
                     externalIP=$(cat 'external_ip_qa.txt')
-                    if [ "$externalIP" == "pending" ]; then
+                    if [ "$externalIP" == "<pending>" ]; then
                         rm external_ip_qa.txt
                         sleep 30  # Add a sleep duration in seconds, e.g., 5 seconds (you can adjust this as needed)
                         kubectl get svc flask-app-service --no-headers | awk '{print $4}' > external_ip_qa.txt
