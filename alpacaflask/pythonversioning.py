@@ -5,22 +5,24 @@ client = docker.from_env()
 images = client.images.list()
 
 # Regular expression pattern to match version numbers in the tag
-version_pattern = r"^liorfizz/alpaca:(\d+\.\d+)$"
+version_pattern = r"^liorfizz/alpaca:(\d+\.\d+\.\d+)$"
 
 existing_versions = [
-    float(re.match(version_pattern, image.tags[0]).group(1))
+    re.match(version_pattern, image.tags[0]).group(1)
     for image in images
     if image.tags and re.match(version_pattern, image.tags[0])
 ]
 
 if existing_versions:
     latest_version = max(existing_versions)
-    next_version = latest_version + 0.1
+    # Convert the version number string to a tuple of integers for easy manipulation
+    latest_version_parts = tuple(map(int, latest_version.split(".")))
+    next_version_parts = (latest_version_parts[0], latest_version_parts[1], latest_version_parts[2] + 1)
 else:
-    next_version = 1.0
+    next_version_parts = (0, 0, 0)
 
-# Format the version number to one decimal place
-next_version = round(next_version, 1)
+# Format the version number as "0.0.0" or "0.0.1"
+next_version = f"{next_version_parts[0]}.{next_version_parts[1]}.{next_version_parts[2]}"
 
 image_name = f"liorfizz/alpaca:{next_version}"
 
@@ -42,7 +44,7 @@ print(f"Successfully pushed image: {latest_image_name}")
 # Clean up older versions of the image
 for image in images:
     if image.tags and re.match(version_pattern, image.tags[0]):
-        version = float(re.match(version_pattern, image.tags[0]).group(1))
-        if version != float(latest_version) and version != float(next_version):
+        version = re.match(version_pattern, image.tags[0]).group(1)
+        if version != latest_version and version != next_version:
             client.images.remove(image.id, force=True)
             print(f"Successfully removed image: {image.tags[0]}")
