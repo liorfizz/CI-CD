@@ -1,12 +1,16 @@
 import docker
+import re
 
 client = docker.from_env()
 images = client.images.list()
 
+# Regular expression pattern to match version numbers in the tag
+version_pattern = r"^liorfizz/alpaca:(\d+\.\d+)$"
+
 existing_versions = [
-    float(image.tags[0].split(":")[1])
+    float(re.match(version_pattern, image.tags[0]).group(1))
     for image in images
-    if image.tags and image.tags[0].startswith("liorfizz/alpaca:")
+    if image.tags and re.match(version_pattern, image.tags[0])
 ]
 
 if existing_versions:
@@ -37,8 +41,8 @@ print(f"Successfully pushed image: {latest_image_name}")
 
 # Clean up older versions of the image
 for image in images:
-    if image.tags and image.tags[0].startswith("liorfizz/alpaca:"):
-        version = float(image.tags[0].split(":")[1])
+    if image.tags and re.match(version_pattern, image.tags[0]):
+        version = float(re.match(version_pattern, image.tags[0]).group(1))
         if version != float(latest_version) and version != float(next_version):
             client.images.remove(image.id, force=True)
             print(f"Successfully removed image: {image.tags[0]}")
