@@ -17,7 +17,7 @@ if existing_versions:
     latest_version = max(existing_versions)
     # Convert the version number string to a tuple of integers for easy manipulation
     latest_version_parts = tuple(map(int, latest_version.split(".")))
-    next_version_parts = (latest_version_parts[0], latest_version_parts[1], latest_version_parts[2] + .01)
+    next_version_parts = (latest_version_parts[0], latest_version_parts[1], latest_version_parts[2] + 0.1)
 else:
     next_version_parts = (2, 3, 0)
 
