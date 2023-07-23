@@ -42,7 +42,6 @@ pipeline {
                         returnStdout: true
                     ).trim()
 
-                    // Print the external IP
                     echo "External IP: ${externalIP}"
                 }
             }
