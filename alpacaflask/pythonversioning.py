@@ -19,7 +19,7 @@ if existing_versions:
     latest_version_parts = tuple(map(int, latest_version.split(".")))
     next_version_parts = (latest_version_parts[0], latest_version_parts[1], latest_version_parts[2] + 1)
 else:
-    next_version_parts = (0, 0, 0)
+    next_version_parts = (2, 3, 0)
 
 # Format the version number as "0.0.0" or "0.0.1"
 next_version = f"{next_version_parts[0]}.{next_version_parts[1]}.{next_version_parts[2]}"
