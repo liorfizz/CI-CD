@@ -25,6 +25,28 @@ pipeline {
             }
         }
 
+        stage('testing Kubernetes') {
+            steps {
+                script {
+                    sh 'gcloud container clusters get-credentials test-cluster --region=europe-central2'
+                    sh 'cd ci-cd && kubectl apply -f withredis.yaml'
+                    sh 'kubectl rollout restart deploy flask-app-deployment'
+            }
+        }
+        stage('Get External IP') {
+            steps {
+                script {
+                    // Run the kubectl command to get the external IP and capture the output into a variable
+                    def externalIP = sh(
+                        script: "kubectl get svc flask-app-service --no-headers | awk '{print \$4}'",
+                        returnStdout: true
+                    ).trim()
+
+                    // Print the external IP
+                    echo "External IP: ${externalIP}"
+                }
+            }
+        }
         stage('running Kubernetes') {
             steps {
                 script {
