@@ -26,7 +26,7 @@ pipeline {
             }
         }
 
-        stage('Testing Kubernetes') {
+        stage('Deploy Test Gcloud') {
             steps {
                 script {
                     sh 'gcloud container clusters get-credentials test-cluster --region=europe-central2'
@@ -39,16 +39,17 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    kubectl get svc flask-app-service --no-headers | awk '{print $4}' > external_ip_qa.txt
-                    externalIP=$(cat 'external_ip_qa.txt')
-                    if [ "$externalIP" == "<pending>" ]; then
-                        rm external_ip_qa.txt
-                        sleep 30  # Add a sleep duration in seconds, e.g., 5 seconds (you can adjust this as needed)
                         kubectl get svc flask-app-service --no-headers | awk '{print $4}' > external_ip_qa.txt
                         externalIP=$(cat 'external_ip_qa.txt')
-                    else
+                        
+                        while [ "$externalIP" = "<pending>" ]; do
+                            rm external_ip_qa.txt
+                            sleep 30  # Add a sleep duration in seconds, e.g., 5 seconds (you can adjust this as needed)
+                            kubectl get svc flask-app-service --no-headers | awk '{print $4}' > external_ip_qa.txt
+                            externalIP=$(cat 'external_ip_qa.txt')
+                        done
+                        
                         echo "...finishing deploy..."
-                    fi
                     '''
                 }
             }
@@ -71,7 +72,16 @@ pipeline {
             }
         }
 
-        stage('Running Kubernetes') {
+        stage('Shut Test Gcloud') {
+            steps {
+                script {
+                    sh 'gcloud container clusters get-credentials test-cluster --region=europe-central2'
+                    sh 'cd ci-cd && kubectl delete -f withredis.yaml'
+                }
+            }
+        }
+
+        stage('Deploy Prod Gcloud') {
             steps {
                 script {
                     sh 'gcloud container clusters get-credentials flask-cluster --region=europe-central2'
