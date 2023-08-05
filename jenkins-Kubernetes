@@ -11,6 +11,7 @@ pipeline {
         stage('Clean and Clone git') {
             steps {
                 sh 'pwd'
+                sh 'rm -rf .git'
                 sh 'rm -rf ci-cd'
                 sh 'rm -rf external_ip_qa.txt'
                 sh 'git clone https://github.com/liorfizz/ci-cd.git'
@@ -31,13 +32,14 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        cp green-carrier-393306-3e663174ea51 ci-cd/terrafolder
+                        cp green-carrier-393306-3e663174ea51.json ci-cd/terrafolder
                         cd ci-cd/terrafolder && terraform init
-                        terraform apply -auto-approve ci-cd/terrafolder/main.tf
+                        terraform apply -auto-approve 
                     '''
                 }
             }
         }
+
 
         stage('Deploy Test Gcloud') {
             steps {
