@@ -26,6 +26,16 @@ pipeline {
             }
         }
 
+        stage('Terraform deploy cluster') {
+            steps {
+                script {
+                   sh '''
+                   terraform init
+                   terraform apply -auto-approve / / /
+                   '''
+                 }
+            }
+        }
         stage('Deploy Test Gcloud') {
             steps {
                 script {
