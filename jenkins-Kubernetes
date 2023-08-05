@@ -30,8 +30,8 @@ pipeline {
             steps {
                 script {
                    sh '''
-                   terraform init
-                   terraform apply -auto-approve / / /
+                   cd ci-cd/terrafolder && terraform init
+                   terraform apply -auto-approve ci-cd/terrafolder/main.tf
                    '''
                  }
             }
