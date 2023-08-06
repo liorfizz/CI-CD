@@ -28,18 +28,6 @@ pipeline {
             }
         }
 
-        stage('Terraform deploy cluster') {
-            steps {
-                script {
-                    sh '''
-                        cp green-carrier-393306-3e663174ea51.json ci-cd/terrafolder
-                        cd ci-cd/terrafolder && terraform init
-                        terraform apply -auto-approve 
-                    '''
-                }
-            }
-        }
-
         stage('Deploy Test Gcloud') {
             steps {
                 script {
