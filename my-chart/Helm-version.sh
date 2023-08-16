@@ -23,7 +23,7 @@ rm "${CHART_YAML}.bak"
 
 # Navigate to chart directory, package the chart, and upload to Google Cloud Storage
 helm package ${PWD}
-gsutil cp my-chart-${NEW_VERSION}.tgz gs://helmflask-bucket/
+gsutil cp ${PWD}/my-chart-${NEW_VERSION}.tgz gs://helmflask-bucket/
 
 echo "you are in : ${PWD}"
 echo "Latest version in Google Cloud Storage: ${LATEST_VERSION}"
