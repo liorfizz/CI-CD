@@ -28,11 +28,11 @@ pipeline {
             }
         }
 
-        stage('Package Helm') {
+        stage('Package Helm and upload') {
             steps {
                 script {
                     sh '''
-                    cd
+                    cd ci-cd/my-chart/ && helm package . && gsutil cp my-chart-0.1.0.tgz gs://helmflask-bucket/
                     '''
                 }
             }
