@@ -32,7 +32,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    cd ci-cd/my-chart/ && helm package . && gsutil cp my-chart-0.1.0.tgz gs://helmflask-bucket/
+                    cd cd ci-cd/my-chart && chmod +x update_helm_version.sh && ./update_helm_version.sh
                     '''
                 }
             }
