@@ -1,0 +1,17 @@
+# values.yaml
+
+flaskApp:
+  replicaCount: 3
+  image:
+    repository: liorfizz/alpaca
+  redisHost: "redis-service"
+  redisPort: "6379"
+
+redis:
+  replicaCount: 1
+  image:
+    repository: redis
+    tag: latest
+
+service:
+  type: LoadBalancer
