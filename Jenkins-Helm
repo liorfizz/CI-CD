@@ -32,7 +32,9 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    cd ci-cd/my-chart && chmod +x Helm-version.sh && ./Helm-version.sh
+                    cd ci-cd/my-chart
+                    chmod +x Helm-version.sh
+                    ./Helm-version.sh
                     '''
                 }
             }
