@@ -34,7 +34,6 @@ pipeline {
                     sh '''
                     cd ci-cd/my-chart
                     chmod +x Helm-version.sh
-                    pwd
                     ./Helm-version.sh
                     '''
                 }
