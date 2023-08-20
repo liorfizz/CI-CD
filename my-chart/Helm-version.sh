@@ -22,8 +22,8 @@ sed -i.bak "s/^version: ${LATEST_VERSION}/version: ${NEW_VERSION}/" "${CHART_YAM
 rm "${CHART_YAML}.bak"
 
 # Navigate to chart directory, package the chart, and upload to Google Cloud Storage
-helm package ${PWD}
-gsutil cp ${PWD}/my-chart-${NEW_VERSION}.tgz gs://helmflask-bucket/
+helm package .
+gsutil cp ./my-chart-${NEW_VERSION}.tgz gs://helmflask-bucket/
 
 echo "you are in : ${PWD}"
 echo "Latest version in Google Cloud Storage: ${LATEST_VERSION}"
