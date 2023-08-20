@@ -18,8 +18,7 @@ PATCH=$((PATCH + 1))
 
 # Update the version in Chart.yaml
 NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}"
-sed -i.bak "s/version: ${LATEST_VERSION}/version: ${NEW_VERSION}/" "${CHART_YAML}"
-rm "${CHART_YAML}.bak"
+sed -i "s/version: ${LATEST_VERSION}/version: ${NEW_VERSION}/" "${CHART_YAML}"
 
 # Navigate to chart directory, package the chart, and upload to Google Cloud Storage
 helm package .
