@@ -44,7 +44,9 @@ pipeline {
             steps {
                 script {
                     sh 'gcloud container clusters get-credentials test-cluster --region=europe-central2'
-                    sh 'cd ci-cd && kubectl apply -f withredis.yaml'
+                    sh 'helm repo add my-chart-repo https://storage.googleapis.com/helmflask-bucket/'
+                    sh 'helm repo update'
+                    sh 'helm upgrade --install alpaca my-chart-repo/my-chart'
                 }
             }
         }
@@ -90,7 +92,7 @@ pipeline {
             steps {
                 script {
                     sh 'gcloud container clusters get-credentials test-cluster --region=europe-central2'
-                    sh 'cd ci-cd && kubectl delete -f withredis.yaml'
+                    sh 'helm delete alpaca my-chart-repo/my-chart'
                 }
             }
         }
@@ -98,8 +100,12 @@ pipeline {
         stage('Deploy Prod Gcloud') {
             steps {
                 script {
-                    sh 'gcloud container clusters get-credentials flask-cluster --region=europe-central2'
-                    sh 'cd ci-cd && kubectl apply -f withredis.yaml'
+                    sh '''
+                       gcloud container clusters get-credentials flask-cluster --region=europe-central2
+                       helm repo add my-chart-repo https://storage.googleapis.com/helmflask-bucket/
+                       helm repo update
+                       helm upgrade --install alpaca my-chart-repo/my-chart
+                    '''
                 }
             }
         }
