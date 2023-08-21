@@ -3,6 +3,7 @@
 # Define the chart directory and Chart.yaml path
 CHART_DIR="."
 CHART_YAML="${CHART_DIR}/Chart.yaml"
+ORIGINAL_VERSION=$(grep -oP '^version: \K\d+\.\d+\.\d+' "${CHART_YAML}")
 
 # Retrieve the latest version from Google Cloud Storage
 LATEST_VERSION=$(gsutil ls gs://helmflask-bucket/ | grep -oP 'my-chart-\K\d+\.\d+\.\d+' | sort -Vr | head -n 1)
@@ -17,7 +18,7 @@ PATCH=$((PATCH + 1))
 
 # Update the version in Chart.yaml
 NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}"
-sed -i.bak "s/^version: 0.1.0/version: ${NEW_VERSION}/" "${CHART_YAML}"
+sed -i.bak "s/^version: ${ORIGINAL_VERSION}/version: ${NEW_VERSION}/" "${CHART_YAML}"
 rm "${CHART_YAML}.bak"
 
 # Navigate to chart directory, package the chart, and upload to Google Cloud Storage
