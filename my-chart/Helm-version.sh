@@ -3,6 +3,8 @@
 # Define the chart directory and Chart.yaml path
 CHART_DIR="."
 CHART_YAML="${CHART_DIR}/Chart.yaml"
+
+# get the currect version
 ORIGINAL_VERSION=$(grep -oP '^version: \K\d+\.\d+\.\d+' "${CHART_YAML}")
 
 # Retrieve the latest version from Google Cloud Storage
