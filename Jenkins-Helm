@@ -10,11 +10,10 @@ pipeline {
     stages {
         stage('Clean and Clone git') {
             steps {
-                sh 'pwd'
-                sh 'rm -rf .git'
-                sh 'rm -rf ci-cd'
-                sh 'rm -rf external_ip_qa.txt'
-                sh 'git clone https://github.com/liorfizz/ci-cd.git'
+                sh '''
+                rm -rf *
+                git clone https://github.com/liorfizz/ci-cd.git
+                '''
             }
         }
 
@@ -43,10 +42,12 @@ pipeline {
         stage('Deploy Test Gcloud') {
             steps {
                 script {
-                    sh 'gcloud container clusters get-credentials test-cluster --region=europe-central2'
-                    sh 'helm repo add my-chart-repo https://storage.googleapis.com/helmflask-bucket/'
-                    sh 'helm repo update'
-                    sh 'helm install alpaca my-chart-repo/my-chart'
+                    sh '''
+                    gcloud container clusters get-credentials test-cluster --region=europe-central2
+                    helm repo add my-chart-repo https://storage.googleapis.com/helmflask-bucket/
+                    helm repo update
+                    helm install alpaca my-chart-repo/my-chart
+                    '''
                 }
             }
         }
@@ -91,8 +92,10 @@ pipeline {
         stage('Shut Test Gcloud') {
             steps {
                 script {
-                    sh 'gcloud container clusters get-credentials test-cluster --region=europe-central2'
-                    sh 'helm delete alpaca my-chart-repo/my-chart'
+                    sh '''
+                    gcloud container clusters get-credentials test-cluster --region=europe-central2
+                    helm delete alpaca my-chart-repo/my-chart
+                    '''
                 }
             }
         }
