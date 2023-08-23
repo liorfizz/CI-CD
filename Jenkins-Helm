@@ -94,7 +94,7 @@ pipeline {
                 script {
                     sh '''
                     gcloud container clusters get-credentials test-cluster --region=europe-central2
-                    helm delete alpaca my-chart-repo/my-chart
+                    helm uninstall alpaca my-chart-repo/my-chart
                     '''
                 }
             }
