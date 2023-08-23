@@ -46,7 +46,7 @@ pipeline {
                     gcloud container clusters get-credentials test-cluster --region=europe-central2
                     helm repo add my-chart-repo https://storage.googleapis.com/helmflask-bucket/
                     helm repo update
-                    helm install alpaca my-chart-repo/my-chart
+                    helm upgrade --install alpaca my-chart-repo/my-chart
                     '''
                 }
             }
