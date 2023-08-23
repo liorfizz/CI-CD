@@ -2,9 +2,6 @@ pipeline {
     agent any
 
     environment {
-        EC2_test_IP = null
-        EC2_prod_IP = null
-        externalIP = null
     }
 
     stages {
