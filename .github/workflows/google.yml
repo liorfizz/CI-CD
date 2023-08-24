@@ -1,0 +1,76 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clean and Clone git
+        run: |
+          rm -rf *
+          git clone https://github.com/liorfizz/ci-cd.git
+
+      - name: Build and Cleanup Container
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          echo "apply the script"
+          cd ci-cd/alpacaflask
+          python3 pythonversioning.py
+
+      - name: Package Helm and upload
+        run: |
+          cd ci-cd/my-chart
+          chmod +x Helm-version.sh
+          ./Helm-version.sh
+
+      - name: Deploy Test Gcloud
+        run: |
+          gcloud container clusters get-credentials test-cluster --region=europe-central2
+          helm repo add my-chart-repo https://storage.googleapis.com/helmflask-bucket/
+          helm repo update
+          helm upgrade --install alpaca my-chart-repo/my-chart
+
+      - name: Get External IP
+        run: |
+          kubectl get svc flask-app-service --no-headers | awk '{print $4}' > external_ip_qa.txt
+          externalIP=$(cat 'external_ip_qa.txt')
+
+          while [ "$externalIP" = "<pending>" ]; do
+              rm external_ip_qa.txt
+              sleep 30
+              kubectl get svc flask-app-service --no-headers | awk '{print $4}' > external_ip_qa.txt
+              externalIP=$(cat 'external_ip_qa.txt')
+          done
+
+          echo "...finishing deploy..."
+
+      - name: Testing Q/A
+        run: |
+          externalIP=$(cat 'external_ip_qa.txt')
+          curl_output=$(curl -s -o /dev/null -w "%{http_code}" http://${externalIP}:5000)
+          if [ "$curl_output" -eq "200" ]; then
+              echo "Site is working (200 OK)"
+          else
+              echo "Error: Site is not working"
+              exit 1
+          fi
+
+      - name: Shut Test Gcloud
+        run: |
+          gcloud container clusters get-credentials test-cluster --region=europe-central2
+          helm uninstall alpaca
+
+      - name: Deploy Prod Gcloud
+        run: |
+          gcloud container clusters get-credentials flask-cluster --region=europe-central2
+          helm repo add my-chart-repo https://storage.googleapis.com/helmflask-bucket/
+          helm repo update
+          helm upgrade --install alpaca my-chart-repo/my-chart
+
