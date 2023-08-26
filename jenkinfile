@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         EC2_test_IP = "35.159.23.172"
-        EC2_prod_IP = "3.122.232.62"
+        EC2_prod_IP = "3.122.232.2"
     }
 
     stages {
