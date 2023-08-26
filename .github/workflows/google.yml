@@ -63,7 +63,7 @@ jobs:
 
           echo "...finishing deploy..."
 
-      - name: Testing Q/A
+      - name: Q/A Connection
         run: |
           externalIP=$(cat 'external_ip_qa.txt')
           curl_output=$(curl -s -o /dev/null -w "%{http_code}" http://${externalIP}:5000)
