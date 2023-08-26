@@ -69,7 +69,7 @@ pipeline {
             }
         }
 
-        stage('Testing Q/A') {
+        stage('Q/A Connection') {
             steps {
                 script {
                     sh '''
