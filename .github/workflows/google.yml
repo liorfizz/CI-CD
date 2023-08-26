@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - ci-cd/.github/workflows/google.yml
+      - 'ci-cd/.github/workflows/google.yml'
 
 jobs:
   build:
