@@ -26,6 +26,7 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
+          pip install docker
           echo "apply the script"
           cd ci-cd/alpacaflask
           python3 pythonversioning.py
