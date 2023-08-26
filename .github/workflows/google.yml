@@ -3,7 +3,9 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main
+      - 'main'
+    paths:
+      - 'ci-cd/.github/workflows/google.yml'
 
 jobs:
   build:
