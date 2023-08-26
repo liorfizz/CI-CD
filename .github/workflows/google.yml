@@ -29,7 +29,7 @@ jobs:
           cd ci-cd/alpacaflask
           python3 pythonversioning.py
 
-      - name: Package Helm and upload
+      - name: Package Helm and Upload
         run: |
           cd ci-cd/my-chart
           chmod +x Helm-version.sh
