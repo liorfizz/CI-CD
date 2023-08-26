@@ -43,6 +43,7 @@ jobs:
 
       - name: Deploy Test Gcloud
         run: |
+          gcloud components install gke-gcloud-auth-plugin
           gcloud container clusters get-credentials test-cluster --region=europe-central2
           helm repo add my-chart-repo https://storage.googleapis.com/helmflask-bucket/
           helm repo update
