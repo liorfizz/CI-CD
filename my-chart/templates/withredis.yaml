@@ -3,6 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: flask-app-service
+  namespace: alpaca
 spec:
   selector:
     app: flask-app
@@ -16,6 +17,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: redis-service
+  namespace: alpaca
 spec:
   selector:
     app: redis
@@ -28,6 +30,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: redis-deployment
+  namespace: alpaca
 spec:
   replicas: {{ .Values.redis.replicaCount }}
   selector:
@@ -49,6 +52,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: flask-app-deployment
+  namespace: alpaca
 spec:
   replicas: {{ .Values.flaskApp.replicaCount }}
   selector:
