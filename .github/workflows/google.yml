@@ -9,6 +9,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+  
+  cd:
+    runs-on: ubuntu-latest
 
     steps:
       - name: Clean and Clone git
@@ -86,7 +89,3 @@ jobs:
           helm repo add my-chart-repo https://storage.googleapis.com/helmflask-bucket/
           helm repo update
           helm upgrade --install alpaca my-chart-repo/my-chart
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
