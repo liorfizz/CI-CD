@@ -44,7 +44,7 @@ jobs:
 
       - name: Package Helm and Upload
         run: |
-          cd ci-cd/my-chart
+          cd /my-chart
           chmod +x Helm-version.sh
           ./Helm-version.sh
 
