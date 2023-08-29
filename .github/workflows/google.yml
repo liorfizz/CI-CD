@@ -87,3 +87,6 @@ jobs:
           helm repo update
           helm upgrade --install alpaca my-chart-repo/my-chart
 
+jobs:
+  build:
+    runs-on: ubuntu-latest
