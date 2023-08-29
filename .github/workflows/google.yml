@@ -34,17 +34,23 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
 
+
     steps:
+      - name: Clean and Clone git
+        run: |
+          rm -rf *
+          git clone https://github.com/liorfizz/ci-cd.git
+          
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v0.2.0
         with:
           project_id: ${{ secrets.gcp_project }}
           service_account_key: ${{ secrets.gcp_credentials }}
           export_default_credentials: true
-
+      
       - name: Package Helm and Upload
         run: |
-          cd /my-chart
+          cd ci-cd/my-chart
           chmod +x Helm-version.sh
           ./Helm-version.sh
 
@@ -86,8 +92,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+     - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0.2.0
+        with:
+          project_id: ${{ secrets.gcp_project }}
+          service_account_key: ${{ secrets.gcp_credentials }}
+          export_default_credentials: true
+          
       - name: Deploy Prod Gcloud
         run: |
+          gcloud components install gke-gcloud-auth-plugin
           gcloud container clusters get-credentials flask-cluster --region=europe-central2
           helm repo add my-chart-repo https://storage.googleapis.com/helmflask-bucket/
           helm repo update
