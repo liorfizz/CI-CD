@@ -9,9 +9,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-  
-  cd:
-    runs-on: ubuntu-latest
 
     steps:
       - name: Clean and Clone git
