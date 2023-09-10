@@ -64,7 +64,7 @@ jobs:
 
       - name: Get External IP
         run: |
-          kubectl get svc flask-app-service --no-headers | awk '{print $4}' > external_ip_qa.txt
+          kubectl get svc flask-app-service --namespace=alpaca --no-headers | awk '{print $4}' > external_ip_qa.txt
           externalIP=$(cat 'external_ip_qa.txt')
 
           while [ "$externalIP" = "<pending>" ]; do
