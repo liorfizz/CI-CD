@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - '.github/workflows/google.yml'
+      - '.github/workflows/GCP.yml'
 jobs:
   build:
     runs-on: ubuntu-latest
