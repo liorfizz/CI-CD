@@ -70,7 +70,7 @@ jobs:
           while [ "$externalIP" = "<pending>" ]; do
               rm external_ip_qa.txt
               sleep 30
-              kubectl get svc flask-app-service --no-headers | awk '{print $4}' > external_ip_qa.txt
+              kubectl get svc flask-app-service --namespace=alpaca --no-headers | awk '{print $4}' > external_ip_qa.txt
               externalIP=$(cat 'external_ip_qa.txt')
           done
 
